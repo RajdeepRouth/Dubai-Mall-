@@ -1,20 +1,41 @@
+# Interactive Sales Deck – Dubai Mall
 
-# React + Vite
+## Overview
+This project is a cinematic, browser-based interactive sales deck designed to pitch The Dubai Mall to potential retail tenants, sponsors, and event partners.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+It focuses on storytelling, smooth animations, and a premium user experience inspired by luxury brands.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+- Full-screen slide-based navigation
+- Smooth animations using Framer Motion
+- Real images and video-based storytelling
+- Modular slide architecture
+- Responsive design
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
+- React (Vite)
+- CSS
+- Framer Motion
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Sections
+1. Intro – Cinematic hero section
+2. Property – Key stats and scale
+3. Experience – Shopping, dining, entertainment
+4. Events – Brand activation opportunities
+5. CTA – Call to action for partnerships
 
-# Dubai-Mall-
+---
 
+## Live Demo
+https://dubai-mall-dusky.vercel.app/
+
+---
+
+## GitHub Repo
+https://github.com/RajdeepRouth/Dubai-Mall-
