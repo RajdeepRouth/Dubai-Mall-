@@ -10,15 +10,23 @@ def create_docx():
     
     files_to_add = [
         'index.html',
+        'tailwind.config.js',
         'src/index.css',
         'src/App.jsx',
-        'src/components/Navigation.jsx',
-        'src/components/SlideWrapper.jsx',
-        'src/slides/IntroSlide.jsx',
-        'src/slides/PropertyStatsSlide.jsx',
-        'src/slides/ExperiencesSlide.jsx',
-        'src/slides/EventsSlide.jsx',
-        'src/slides/CTASlide.jsx'
+        'src/data/slides.config.js',
+        'src/hooks/useCountUp.js',
+        'src/utils/icons.jsx',
+        'src/components/ChapterPanel.jsx',
+        'src/components/SlideNav.jsx',
+        'src/components/SlideRenderer.jsx',
+        'src/components/SubDeck.jsx',
+        'src/slides/ActionClosingSlide.jsx',
+        'src/slides/CinematicHeroSlide.jsx',
+        'src/slides/EditorialLuxurySlide.jsx',
+        'src/slides/GridGallerySlide.jsx',
+        'src/slides/MultiColumnSlide.jsx',
+        'src/slides/SpecsCardSlide.jsx',
+        'src/slides/SplitStatsSlide.jsx'
     ]
     
     for file_path in files_to_add:

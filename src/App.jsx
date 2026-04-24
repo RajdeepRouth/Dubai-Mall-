@@ -1,71 +1,124 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
-import Sidebar from './components/Sidebar';
-import HeroSection from './sections/HeroSection';
-import WhyDubaiMall from './sections/WhyDubaiMall';
-import RetailLuxury from './sections/RetailLuxury';
-import DiningLifestyle from './sections/DiningLifestyle';
-import Attractions from './sections/Attractions';
-import EventsActivations from './sections/EventsActivations';
-import BusinessOpportunities from './sections/BusinessOpportunities';
-
-const slides = [
-  { id: 'intro', title: 'The Epicenter', component: HeroSection },
-  { id: 'scale', title: 'Global Scale', component: WhyDubaiMall },
-  { id: 'retail', title: 'Retail & Luxury', component: RetailLuxury },
-  { id: 'dining', title: 'Dining & Lifestyle', component: DiningLifestyle },
-  { id: 'attractions', title: 'Entertainment', component: Attractions },
-  { id: 'events', title: 'Events & Platform', component: EventsActivations },
-  { id: 'business', title: 'Partner With Us', component: BusinessOpportunities }
-];
+import SlideNav from './components/SlideNav';
+import ChapterPanel from './components/ChapterPanel';
+import SlideRenderer from './components/SlideRenderer';
+import SubDeck from './components/SubDeck';
+import { slidesConfig } from './data/slides.config';
 
 function App() {
-  const [activeId, setActiveId] = useState('intro');
-  const scrollRef = useRef(null);
-  const { scrollYProgress } = useScroll({ container: scrollRef });
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isChapterPanelOpen, setIsChapterPanelOpen] = useState(false);
+  const [activeSubDeckId, setActiveSubDeckId] = useState(null);
+  const [direction, setDirection] = useState('next');
+  
+  const touchStartX = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      { root: scrollRef.current, threshold: 0.5 }
-    );
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (activeSubDeckId) setActiveSubDeckId(null);
+        else if (isChapterPanelOpen) setIsChapterPanelOpen(false);
+        return;
+      }
 
-    slides.forEach((slide) => {
-      const el = document.getElementById(slide.id);
-      if (el) observer.observe(el);
-    });
+      if (isChapterPanelOpen || activeSubDeckId) return;
 
-    return () => observer.disconnect();
-  }, []);
+      if (e.key === 'ArrowRight') goToNext();
+      else if (e.key === 'ArrowLeft') goToPrev();
+    };
+
+    const handleOpenSubDeck = (e) => {
+      setActiveSubDeckId(e.detail);
+    };
+
+    const handleDeckNavigate = (e) => {
+      if (e.detail === 'next') goToNext();
+      if (e.detail === 'prev') goToPrev();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('open-subdeck', handleOpenSubDeck);
+    window.addEventListener('deck-navigate', handleDeckNavigate);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('open-subdeck', handleOpenSubDeck);
+      window.removeEventListener('deck-navigate', handleDeckNavigate);
+    };
+  }, [currentSlideIndex, isChapterPanelOpen, activeSubDeckId]);
+
+  const goToNext = () => {
+    if (currentSlideIndex < slidesConfig.length - 1) {
+      setDirection('next');
+      setCurrentSlideIndex(prev => prev + 1);
+    }
+  };
+
+  const goToPrev = () => {
+    if (currentSlideIndex > 0) {
+      setDirection('prev');
+      setCurrentSlideIndex(prev => prev - 1);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchStartX.current - touchEndX;
+
+    if (Math.abs(deltaX) > 50 && !isChapterPanelOpen && !activeSubDeckId) {
+      if (deltaX > 0) goToNext();
+      else goToPrev();
+    }
+    touchStartX.current = null;
+  };
+
+  const jumpToSlide = (index) => {
+    setDirection(index > currentSlideIndex ? 'next' : 'prev');
+    setCurrentSlideIndex(index);
+    setIsChapterPanelOpen(false);
+  };
 
   return (
-    <div className="deck-container">
-      <Sidebar slides={slides} activeId={activeId} scrollRef={scrollRef} />
-      
-      <main className="main-content" ref={scrollRef} id="main-scroll-container">
-        {/* Progress Indicator */}
-        <motion.div
-          style={{
-            position: 'fixed', top: 0, left: 0, right: 0, height: '4px',
-            background: 'var(--accent-gold)', transformOrigin: '0%', scaleX, zIndex: 1000,
-            boxShadow: '0 0 10px rgba(212, 175, 55, 0.5)'
-          }}
-        />
+    <main 
+      className="w-full h-screen bg-dark relative overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <SlideRenderer 
+        slide={slidesConfig[currentSlideIndex]} 
+        direction={direction}
+        key={currentSlideIndex} 
+      />
 
-        {slides.map((slide) => (
-          <section id={slide.id} key={slide.id} className="slide-section">
-            <slide.component />
-          </section>
-        ))}
-      </main>
-    </div>
+      <SlideNav 
+        currentIndex={currentSlideIndex} 
+        totalSlides={slidesConfig.length}
+        onNext={goToNext}
+        onPrev={goToPrev}
+        onOpenMenu={() => setIsChapterPanelOpen(true)}
+      />
+
+      {isChapterPanelOpen && (
+        <ChapterPanel 
+          slides={slidesConfig}
+          currentIndex={currentSlideIndex}
+          onClose={() => setIsChapterPanelOpen(false)}
+          onSelect={jumpToSlide}
+        />
+      )}
+
+      {activeSubDeckId && (
+        <SubDeck 
+          subDeckId={activeSubDeckId}
+          onClose={() => setActiveSubDeckId(null)}
+        />
+      )}
+    </main>
   );
 }
 
