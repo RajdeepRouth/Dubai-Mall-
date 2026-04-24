@@ -1,7 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Sidebar = ({ slides, activeSlide, setActiveSlide }) => {
+const Sidebar = ({ slides, activeId, scrollRef }) => {
+  const scrollToSlide = (id) => {
+    const el = document.getElementById(id);
+    if (el && scrollRef.current) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="sidebar" style={{ 
       width: '300px', 
@@ -10,22 +17,23 @@ const Sidebar = ({ slides, activeSlide, setActiveSlide }) => {
       borderRight: '1px solid rgba(255,255,255,0.05)',
       display: 'flex',
       flexDirection: 'column',
-      padding: '2rem 1.5rem',
+      padding: '3rem 1.5rem',
       position: 'relative',
-      zIndex: 100
+      zIndex: 100,
+      flexShrink: 0
     }}>
       <div style={{ marginBottom: '4rem' }}>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: '#fff', letterSpacing: '0.05em' }}>THE DUBAI MALL</h1>
-        <p style={{ fontSize: '0.75rem', color: 'var(--accent-gold)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.5rem' }}>Digital Pitch Deck</p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--accent-gold)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.5rem' }}>Interactive Pitch Deck</p>
       </div>
 
       <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {slides.map((slide, index) => {
-          const isActive = activeSlide === index;
+          const isActive = activeId === slide.id;
           return (
             <button
               key={slide.id}
-              onClick={() => setActiveSlide(index)}
+              onClick={() => scrollToSlide(slide.id)}
               style={{
                 background: 'none', border: 'none', outline: 'none', cursor: 'pointer',
                 textAlign: 'left', padding: '1rem', borderRadius: '8px',

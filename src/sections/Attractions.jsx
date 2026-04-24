@@ -1,15 +1,17 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const Attractions = () => {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   return (
     <div className="section-container" style={{ position: 'relative', overflow: 'hidden', padding: 0 }}>
       <div style={{ position: 'relative', height: '80vh' }}>
-        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=1920&q=80" alt="Dubai Aquarium" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div className="gradient-overlay-full" style={{ background: 'rgba(0,0,0,0.5)' }} />
+        <iframe 
+          src="https://www.youtube.com/embed/5Peo-ivmupE?autoplay=1&mute=1&loop=1&playlist=5Peo-ivmupE&controls=0&showinfo=0&rel=0" 
+          style={{ width: '100%', height: '100%', objectFit: 'cover', border: 'none', pointerEvents: 'none' }} 
+          allow="autoplay; encrypted-media" 
+        ></iframe>
+        <div className="gradient-overlay-full" style={{ background: 'rgba(0,0,0,0.6)' }} />
         
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', padding: '10%' }}>
           <motion.div 

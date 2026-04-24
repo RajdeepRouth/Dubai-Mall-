@@ -37,12 +37,24 @@ h1, h2, h3, h4, h5, h6 {
   flex: 1;
   height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.slide-section {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
 }
 
 .slide-wrapper {
-  /* Internal scrolling allowed if a slide is too long */
-  overflow-y: auto;
   height: 100%;
 }
 
