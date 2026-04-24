@@ -8,7 +8,7 @@ This application replaces the traditional static pitch deck with an immersive, n
 ## 🎨 Design Decisions & UI/UX Direction
 - **Luxury-Grade Aesthetic**: Inspired by Apple and Louis Vuitton, utilizing a stark dark mode (`#050505`) to create extreme contrast. 
 - **Typography**: Uses `Playfair Display` for elegant, structural headings and `Inter` for clean, highly legible body copy. Gold accents (`#d4af37`) direct the user's eye to key metrics and calls to action.
-- **Continuous Scroll Architecture**: Migrated from a slide-based structure to a continuous vertical scroll. This empowers the user to navigate at their own pace, utilizing Framer Motion's `useScroll` and `whileInView` for elegant parallax and stagger effects.
+- **Digideck Presentation Architecture**: Transformed from a standard scrolling website into a true "Digideck" format. It features a persistent sidebar acting as a non-linear Table of Contents, allowing the presenter to instantly jump between full-screen "slides" (modules) based on the audience's interest. This is ideal for live sales calls and standalone exploration.
 - **Media-First Layout**: Heavy reliance on ultra-high-definition, full-width imagery (via Unsplash) and a cinematic hero video. A sophisticated multi-stop gradient overlay ensures typography remains legible over complex backgrounds.
 
 ## ⚡ Tech Stack

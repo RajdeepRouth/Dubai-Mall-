@@ -1,14 +1,10 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const HeroSection = () => {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1000], [0, 300]);
-  const opacity = useTransform(scrollY, [0, 600], [1, 0]);
-
   return (
     <div className="full-height" style={{ position: 'relative', overflow: 'hidden' }}>
-      <motion.div style={{ y, width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+      <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
         <video 
           autoPlay muted loop playsInline
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -16,11 +12,11 @@ const HeroSection = () => {
           <source src="https://assets.mixkit.co/videos/preview/mixkit-shopping-mall-interior-with-escalators-and-shops-4294-large.mp4" type="video/mp4" />
         </video>
         <div className="gradient-overlay-full" />
-      </motion.div>
+      </div>
       
-      <motion.div 
+      <div 
         className="section-container"
-        style={{ opacity, zIndex: 10, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        style={{ zIndex: 10, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
         <motion.p 
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }}
@@ -40,12 +36,7 @@ const HeroSection = () => {
         >
           Where the world comes to shop, dine, and experience the extraordinary. Position your brand at the most prestigious address on Earth.
         </motion.p>
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}
-        >
-          <a href="#why-us" className="btn-primary" style={{ backgroundColor: 'var(--accent-gold)' }}>Explore the Vision</a>
-        </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 };

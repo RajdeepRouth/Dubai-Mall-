@@ -10,22 +10,40 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
+html, body, #root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   font-family: var(--font-sans);
   background-color: var(--bg-dark);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 { 
   font-family: var(--font-serif); 
   font-weight: 400; 
+}
+
+/* Digideck Layout */
+.deck-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-wrapper {
+  /* Internal scrolling allowed if a slide is too long */
+  overflow-y: auto;
+  height: 100%;
 }
 
 /* Typography Utilities */
@@ -55,14 +73,20 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Layout */
 .section-container {
-  padding: 8rem 10%;
-  position: relative;
-  width: 100%;
+  padding: 6rem 8%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-@media (max-width: 1024px) { .section-container { padding: 6rem 5%; } }
-@media (max-width: 768px) { .section-container { padding: 4rem 5%; } }
+@media (max-width: 1024px) { 
+  .deck-container { flex-direction: column; }
+  .sidebar { width: 100% !important; height: auto !important; padding: 1rem !important; flex-direction: row !important; overflow-x: auto; }
+  .sidebar nav { flex-direction: row !important; }
+  .section-container { padding: 4rem 5%; } 
+}
 
-.full-height { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+.full-height { height: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
 
 /* Image Overlays */
 .gradient-overlay-bottom {
@@ -78,7 +102,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Custom Scrollbar */
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #555; }
