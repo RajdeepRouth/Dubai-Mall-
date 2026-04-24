@@ -1,53 +1,84 @@
 :root {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
-  --bg-dark: #0a0a0a;
+  --bg-dark: #050505;
+  --bg-light: #111111;
   --text-primary: #ffffff;
   --text-secondary: #a0a0a0;
   --accent-gold: #d4af37;
-  --spacing-base: 1rem;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-dark);
   color: var(--text-primary);
-  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 400; }
+h1, h2, h3, h4, h5, h6 { 
+  font-family: var(--font-serif); 
+  font-weight: 400; 
+}
 
-.deck-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+/* Typography Utilities */
+.text-gold { color: var(--accent-gold); }
+.text-muted { color: var(--text-secondary); }
+.uppercase-tracking { text-transform: uppercase; letter-spacing: 0.15em; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 500; }
 
+/* Buttons */
 .btn-primary {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 1rem 2rem; background-color: var(--text-primary); color: var(--bg-dark);
-  font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500;
+  padding: 1rem 2.5rem; background-color: var(--text-primary); color: var(--bg-dark);
+  font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase; border: none;
-  cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+  cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); text-decoration: none;
 }
-.btn-primary:hover { background-color: var(--text-secondary); transform: translateY(-2px); }
+.btn-primary:hover { background-color: var(--text-secondary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
 .btn-outline {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 1rem 2rem; background-color: transparent; color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.3); font-family: var(--font-sans);
+  padding: 1rem 2.5rem; background-color: transparent; color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.4); font-family: var(--font-sans);
   font-size: 0.875rem; font-weight: 500; letter-spacing: 0.1em;
-  text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  text-transform: uppercase; cursor: pointer; transition: all 0.4s ease;
+  backdrop-filter: blur(8px);
 }
 .btn-outline:hover { border-color: var(--text-primary); background-color: rgba(255, 255, 255, 0.1); }
 
-.slide-content {
-  position: relative; z-index: 10; width: 100%; height: 100%;
-  display: flex; flex-direction: column; padding: 4rem 8rem;
+/* Layout */
+.section-container {
+  padding: 8rem 10%;
+  position: relative;
+  width: 100%;
 }
-@media (max-width: 1024px) { .slide-content { padding: 3rem 4rem; } }
-@media (max-width: 768px) { .slide-content { padding: 2rem 2rem; } }
+@media (max-width: 1024px) { .section-container { padding: 6rem 5%; } }
+@media (max-width: 768px) { .section-container { padding: 4rem 5%; } }
 
-.bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-.bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.full-height { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+/* Image Overlays */
+.gradient-overlay-bottom {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+  background: linear-gradient(to top, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0) 100%);
+  pointer-events: none;
+}
+
+.gradient-overlay-full {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
