@@ -7,3 +7,37 @@
     @apply bg-dark text-textPrimary overflow-hidden w-full h-screen m-0 p-0;
   }
 }
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px rgba(201, 169, 110, 0.5);
+  }
+  
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Ensure all slides can scroll if content is too tall */
+.slide-content-wrapper {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  height: 100%;
+}
+.slide-content-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes kenBurns {
+  0%   { transform: scale(1)    translateX(0);      }
+  100% { transform: scale(1.08) translateX(-1%);    }
+}
+@keyframes kenBurns2 {
+  0%   { transform: scale(1)    translateX(0);    }
+  100% { transform: scale(1.06) translateX(1%);   }
+}

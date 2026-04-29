@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { subDecksConfig } from '../data/slides.config';
-import DeckCTA from './DeckCTA';
+import DeckButton from './DeckButton';
 
 const CloseIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -86,68 +86,86 @@ export default function SubDeck({ subDeckId, onClose }) {
 
       <div key={subIndex} className={`flex-1 relative overflow-hidden ${animClass}`}>
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <img src={currentSlide.backgroundImage} alt="Background" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-dark/85 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-[#111] to-[#1a1814]" />
+          <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-20 mix-blend-overlay" />
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto h-full flex flex-col justify-center p-8 pt-16">
-          <h2 className="text-[clamp(40px,4vw,64px)] font-light leading-[1.1] mb-6 max-w-4xl">
-            {currentSlide.headline}
-          </h2>
-          <p className="text-textSecondary text-lg md:text-xl leading-relaxed max-w-3xl mb-8">
-            {currentSlide.body}
-          </p>
+        <div className="relative z-10 w-full max-w-7xl mx-auto h-full flex items-center justify-between p-8 pt-16 gap-12 overflow-y-auto hide-scrollbar">
+          <div className="w-full lg:w-6/12 relative z-10 pr-4">
+            <h2 className="text-[clamp(40px,4vw,64px)] font-light leading-[1.1] mb-6 whitespace-pre-line">
+              {currentSlide.headline}
+            </h2>
+            <p className="text-textSecondary text-lg md:text-xl leading-relaxed mb-8">
+              {currentSlide.body}
+            </p>
 
-          {currentSlide.highlights && (
-            <ul className="space-y-3 max-w-2xl mb-8">
-              {currentSlide.highlights.map((item, i) => (
-                <li key={i} className="flex items-start text-lg">
-                  <span className="text-gold mr-4 mt-1">✦</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          )}
+            {currentSlide.highlights && (
+              <ul className="space-y-3 mb-8">
+                {currentSlide.highlights.map((item, i) => (
+                  <li key={i} className="flex items-start text-lg">
+                    <span className="text-gold mr-4 mt-1">✦</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
-          {currentSlide.services && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mb-8">
-              {currentSlide.services.map((svc, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 p-6">
-                  <h4 className="text-gold font-medium mb-2">{svc.name}</h4>
-                  <p className="text-textSecondary text-sm">{svc.detail}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {currentSlide.steps && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mb-8">
-              {currentSlide.steps.map((step, i) => (
-                <div key={i} className="border-l-2 border-gold pl-6 py-2">
-                  <div className="text-gold font-bold mb-2 text-xl">{step.number}</div>
-                  <h4 className="text-lg font-medium mb-2">{step.title}</h4>
-                  <p className="text-textSecondary text-sm">{step.detail}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {currentSlide.cta && (
-            <div className="mt-4">
-              <div className="mb-6">
-                <DeckCTA 
-                  label={currentSlide.cta.label} 
-                  action={currentSlide.cta.action} 
-                  variant="solid" 
-                />
+            {currentSlide.services && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {currentSlide.services.map((svc, i) => (
+                  <div key={i} className="bg-white/5 border border-white/10 p-6">
+                    <h4 className="text-gold font-medium mb-2">{svc.name}</h4>
+                    <p className="text-textSecondary text-sm">{svc.detail}</p>
+                  </div>
+                ))}
               </div>
-              {currentSlide.contact && (
-                <div className="text-textSecondary text-sm flex gap-4 font-mono">
-                  <span>{currentSlide.contact.email}</span>
-                  <span>|</span>
-                  <span>{currentSlide.contact.phone}</span>
+            )}
+
+            {currentSlide.steps && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {currentSlide.steps.map((step, i) => (
+                  <div key={i} className="border-l-2 border-gold pl-6 py-2">
+                    <div className="text-gold font-bold mb-2 text-xl">{step.number}</div>
+                    <h4 className="text-lg font-medium mb-2">{step.title}</h4>
+                    <p className="text-textSecondary text-sm">{step.detail}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {currentSlide.cta && (
+              <div className="mt-4">
+                <div className="mb-6">
+                  <DeckButton 
+                    label={currentSlide.cta.label} 
+                    action={currentSlide.cta.action} 
+                    variant="solid" 
+                  />
                 </div>
-              )}
+                {currentSlide.contact && (
+                  <div className="text-textSecondary text-sm flex gap-4 font-mono">
+                    <span>{currentSlide.contact.email}</span>
+                    <span>|</span>
+                    <span>{currentSlide.contact.phone}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {currentSlide.images && currentSlide.images.length >= 2 && (
+            <div className="hidden lg:block w-6/12 h-full absolute right-0 top-0 z-20 pointer-events-none">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img src={currentSlide.images[0]} className="absolute w-[45%] aspect-[3/4] object-cover border border-white/10 shadow-2xl transform -rotate-6 -translate-x-12 opacity-80 hover:opacity-100 hover:rotate-0 hover:z-30 hover:scale-105 pointer-events-auto cursor-pointer transition-all duration-500" alt="Gallery 1" />
+                <img src={currentSlide.images[1]} className="absolute w-[50%] aspect-[4/5] object-cover border border-white/10 shadow-2xl transform rotate-6 translate-x-12 translate-y-8 opacity-100 z-10 hover:opacity-100 hover:rotate-0 hover:z-30 hover:scale-105 pointer-events-auto cursor-pointer transition-all duration-500" alt="Gallery 2" />
+              </div>
+            </div>
+          )}
+          {currentSlide.images && currentSlide.images.length === 1 && (
+            <div className="hidden lg:block w-6/12 h-full absolute right-0 top-0 z-20 pointer-events-none">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img src={currentSlide.images[0]} className="absolute w-[60%] aspect-[3/4] object-cover border border-white/10 shadow-2xl transform rotate-2 opacity-100 hover:rotate-0 hover:z-30 hover:scale-105 pointer-events-auto cursor-pointer transition-all duration-500" alt="Gallery 1" />
+              </div>
             </div>
           )}
         </div>

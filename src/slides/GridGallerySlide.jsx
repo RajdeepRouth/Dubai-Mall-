@@ -1,37 +1,38 @@
 import React from 'react';
 import useCountUp from '../hooks/useCountUp';
-import DeckCTA from '../components/DeckCTA';
+import DeckButton from '../components/DeckButton';
 
 const StatRow = ({ stat }) => {
   const count = useCountUp(stat.value, 1500);
   return (
     <div className="flex items-end gap-3 mb-4 border-b border-white/10 pb-2">
-      <div className="text-4xl md:text-5xl font-bold text-gold tabular-nums tracking-tighter flex items-baseline">
+      <div className="text-4xl md:text-5xl font-light text-[#C9A96E] tabular-nums tracking-tighter flex items-baseline">
         <span>{stat.prefix}</span>
         <span>{count}</span>
         <span>{stat.suffix}</span>
       </div>
-      <div className="text-sm text-textSecondary uppercase tracking-widest mb-1">
+      <div className="text-[10px] text-white/50 uppercase tracking-widest mb-1">
         {stat.label}
       </div>
     </div>
   );
 };
 
-export default function GridGallerySlide({ headline, backgroundImage, images, stats, tiles, cta, subDeckCta }) {
+export default function GridGallerySlide({ headline, hook, body, backgroundImage, images, stats, tiles, cta, subDeckCta }) {
   return (
-    <div className="w-full h-full relative overflow-hidden flex flex-col justify-center items-center p-8 lg:p-12">
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <img src={backgroundImage} alt="Background" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-dark/90 backdrop-blur-md" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-7xl flex flex-col md:flex-row h-full gap-6 lg:gap-12 pt-4 pb-20">
+    <div 
+      className="w-full h-full relative overflow-y-auto flex flex-col justify-center items-center p-8 lg:p-12 hide-scrollbar"
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
+      <style dangerouslySetInnerHTML={{__html: `div::-webkit-scrollbar { display: none; }`}} />
+      <div className="relative z-10 w-full max-w-7xl flex flex-col md:flex-row gap-6 lg:gap-12 pt-4 pb-20 my-auto">
         {/* Left Column */}
-        <div className="w-full md:w-5/12 flex flex-col justify-center pb-4">
-          <h2 className="text-[clamp(40px,4vw,64px)] font-light leading-[1.1] mb-6 text-white">
+        <div className="w-full md:w-5/12 flex flex-col justify-center pb-4 mt-[60px] md:mt-0">
+          {hook && <div className="text-[#C9A96E] text-[12px] italic tracking-[0.1em] mb-4">{hook}</div>}
+          <h2 className="text-[clamp(40px,4vw,64px)] font-light leading-[1.1] mb-6 text-white whitespace-pre-line">
             {headline}
           </h2>
+          {body && <p className="text-white/60 text-[14px] leading-relaxed max-w-[400px] mb-8">{body}</p>}
           
           {stats && (
             <div className="mb-6">
@@ -41,10 +42,10 @@ export default function GridGallerySlide({ headline, backgroundImage, images, st
 
           <div className="flex flex-col sm:flex-row gap-4 mt-auto">
             {cta && (
-              <DeckCTA label={cta.label} action={cta.action} variant={cta.primary ? 'solid' : 'outline'} />
+              <DeckButton label={cta.label} action={cta.action} variant={cta.primary ? 'solid' : 'text'} />
             )}
             {subDeckCta && (
-              <DeckCTA 
+              <DeckButton 
                 label={subDeckCta.label} 
                 action={subDeckCta.action} 
                 subDeckId={subDeckCta.subDeckId}
@@ -59,8 +60,11 @@ export default function GridGallerySlide({ headline, backgroundImage, images, st
           {images && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {images.map((img, i) => (
-                <div key={i} className="aspect-[4/3] overflow-hidden bg-cardBg border border-white/5">
-                  <img src={img} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Gallery item" />
+                <div 
+                  key={i} 
+                  className="aspect-[4/3] overflow-hidden bg-cardBg border border-white/5 cursor-default group"
+                >
+                  <img src={img} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Gallery item" />
                 </div>
               ))}
             </div>
@@ -69,8 +73,11 @@ export default function GridGallerySlide({ headline, backgroundImage, images, st
           {tiles && (
             <div className="flex flex-col gap-4">
               {tiles.map((tile, i) => (
-                <div key={i} className="p-6 bg-cardBg/60 border border-white/10 text-xl font-light text-white/90 flex items-center justify-center text-center hover:border-gold/30 transition-colors">
-                  {tile}
+                <div key={i} className="p-6 bg-cardBg/60 border border-white/10 text-xl font-light text-white/90 flex flex-col sm:flex-row items-center justify-between text-center sm:text-left hover:border-[#C9A96E]/30 transition-colors">
+                  <span className="mb-4 sm:mb-0">{typeof tile === 'string' ? tile : tile.label}</span>
+                  {typeof tile !== 'string' && tile.action && (
+                    <DeckButton label="Explore" action={tile.action} subDeckId={tile.subDeckId} variant="outline" size="sm" />
+                  )}
                 </div>
               ))}
             </div>

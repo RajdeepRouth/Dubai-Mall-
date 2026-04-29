@@ -1,125 +1,66 @@
-import React, { useState, useEffect, useRef } from 'react';
-import SlideNav from './components/SlideNav';
-import ChapterPanel from './components/ChapterPanel';
-import SlideRenderer from './components/SlideRenderer';
-import SubDeck from './components/SubDeck';
-import { slidesConfig } from './data/slides.config';
+import React, { useState, useEffect } from 'react';
+import SplashScreen from './screens/SplashScreen';
+import IntroVideoScreen from './screens/IntroVideoScreen';
+import HubScreen from './screens/HubScreen';
+import DeckShell from './screens/DeckShell';
+import LoginScreen from './screens/LoginScreen';
 
-function App() {
+export default function App() {
+  const [stage, setStage] = useState('splash'); // 'splash' | 'intro' | 'hub' | 'deck' | 'login'
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [isChapterPanelOpen, setIsChapterPanelOpen] = useState(false);
   const [activeSubDeckId, setActiveSubDeckId] = useState(null);
-  const [direction, setDirection] = useState('next');
-  
-  const touchStartX = useRef(null);
+  const [transitioning, setTransitioning] = useState(false);
+
+  const goToStage = (next, slideIndex = 0) => {
+    setTransitioning(true);
+    setTimeout(() => {
+      setStage(next);
+      if (next === 'deck') setCurrentSlideIndex(slideIndex);
+      setTimeout(() => setTransitioning(false), 100);
+    }, 700);
+  };
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        if (activeSubDeckId) setActiveSubDeckId(null);
-        else if (isChapterPanelOpen) setIsChapterPanelOpen(false);
-        return;
-      }
-
-      if (isChapterPanelOpen || activeSubDeckId) return;
-
-      if (e.key === 'ArrowRight') goToNext();
-      else if (e.key === 'ArrowLeft') goToPrev();
-    };
-
-    const handleOpenSubDeck = (e) => {
-      setActiveSubDeckId(e.detail);
-    };
-
-    const handleDeckNavigate = (e) => {
-      if (e.detail === 'next') goToNext();
-      if (e.detail === 'prev') goToPrev();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('open-subdeck', handleOpenSubDeck);
-    window.addEventListener('deck-navigate', handleDeckNavigate);
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('open-subdeck', handleOpenSubDeck);
-      window.removeEventListener('deck-navigate', handleDeckNavigate);
-    };
-  }, [currentSlideIndex, isChapterPanelOpen, activeSubDeckId]);
-
-  const goToNext = () => {
-    if (currentSlideIndex < slidesConfig.length - 1) {
-      setDirection('next');
-      setCurrentSlideIndex(prev => prev + 1);
-    }
-  };
-
-  const goToPrev = () => {
-    if (currentSlideIndex > 0) {
-      setDirection('prev');
-      setCurrentSlideIndex(prev => prev - 1);
-    }
-  };
-
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e) => {
-    if (touchStartX.current === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const deltaX = touchStartX.current - touchEndX;
-
-    if (Math.abs(deltaX) > 50 && !isChapterPanelOpen && !activeSubDeckId) {
-      if (deltaX > 0) goToNext();
-      else goToPrev();
-    }
-    touchStartX.current = null;
-  };
-
-  const jumpToSlide = (index) => {
-    setDirection(index > currentSlideIndex ? 'next' : 'prev');
-    setCurrentSlideIndex(index);
-    setIsChapterPanelOpen(false);
-  };
+    const handleLogin = () => goToStage('login', currentSlideIndex);
+    window.addEventListener('deck:login', handleLogin);
+    return () => window.removeEventListener('deck:login', handleLogin);
+  }, [currentSlideIndex]);
 
   return (
-    <main 
-      className="w-full h-screen bg-dark relative overflow-hidden"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <SlideRenderer 
-        slide={slidesConfig[currentSlideIndex]} 
-        direction={direction}
-        key={currentSlideIndex} 
-      />
+    <div className="w-full h-screen bg-[#0A0A0A] overflow-hidden relative">
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: '#000',
+        opacity: transitioning ? 1 : 0,
+        pointerEvents: transitioning ? 'all' : 'none',
+        transition: 'opacity 700ms ease',
+      }} />
 
-      <SlideNav 
-        currentIndex={currentSlideIndex} 
-        totalSlides={slidesConfig.length}
-        onNext={goToNext}
-        onPrev={goToPrev}
-        onOpenMenu={() => setIsChapterPanelOpen(true)}
-      />
-
-      {isChapterPanelOpen && (
-        <ChapterPanel 
-          slides={slidesConfig}
-          currentIndex={currentSlideIndex}
-          onClose={() => setIsChapterPanelOpen(false)}
-          onSelect={jumpToSlide}
+      {stage === 'splash' && (
+        <SplashScreen onEnter={() => goToStage('intro')} />
+      )}
+      
+      {stage === 'intro' && (
+        <IntroVideoScreen onComplete={() => goToStage('hub')} />
+      )}
+      
+      {stage === 'hub' && (
+        <HubScreen onSelect={(i) => goToStage('deck', i)} />
+      )}
+      
+      {stage === 'deck' && (
+        <DeckShell
+          currentSlideIndex={currentSlideIndex}
+          setCurrentSlideIndex={setCurrentSlideIndex}
+          activeSubDeckId={activeSubDeckId}
+          setActiveSubDeckId={setActiveSubDeckId}
+          onBackToHub={() => goToStage('hub')}
         />
       )}
 
-      {activeSubDeckId && (
-        <SubDeck 
-          subDeckId={activeSubDeckId}
-          onClose={() => setActiveSubDeckId(null)}
-        />
+      {stage === 'login' && (
+        <LoginScreen onBack={() => goToStage('deck', currentSlideIndex)} />
       )}
-    </main>
+    </div>
   );
 }
-
-export default App;

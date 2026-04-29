@@ -1,7 +1,7 @@
 import React from 'react';
 import CinematicHeroSlide from '../slides/CinematicHeroSlide';
-import SplitStatsSlide from '../slides/SplitStatsSlide';
-import MultiColumnSlide from '../slides/MultiColumnSlide';
+import CanvasStatsSlide from '../slides/CanvasStatsSlide';
+import InteractiveRetailSlide from '../slides/InteractiveRetailSlide';
 import EditorialLuxurySlide from '../slides/EditorialLuxurySlide';
 import GridGallerySlide from '../slides/GridGallerySlide';
 import SpecsCardSlide from '../slides/SpecsCardSlide';
@@ -9,8 +9,8 @@ import ActionClosingSlide from '../slides/ActionClosingSlide';
 
 const componentMap = {
   CinematicHeroSlide,
-  SplitStatsSlide,
-  MultiColumnSlide,
+  CanvasStatsSlide,
+  InteractiveRetailSlide,
   EditorialLuxurySlide,
   GridGallerySlide,
   SpecsCardSlide,
@@ -28,8 +28,24 @@ export default function SlideRenderer({ slide, direction }) {
   const animClass = direction === 'next' ? 'animate-slide-in-right' : 'animate-slide-in-left';
   
   return (
-    <div className={`absolute inset-0 w-full h-full ${animClass}`}>
-      <Component {...slide} />
+    <div className={`absolute inset-0 w-full h-full overflow-hidden ${animClass}`}>
+      {/* GLOBAL SLIDE BACKGROUND */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 0,
+        backgroundImage: `url(${slide.bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(0,0,0,0.65)',
+        }} />
+      </div>
+
+      {/* SLIDE CONTENT */}
+      <div className="relative z-10 w-full h-full">
+        <Component {...slide} />
+      </div>
     </div>
   );
 }
