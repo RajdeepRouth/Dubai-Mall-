@@ -2,7 +2,7 @@ import React from 'react';
 import ChapterTile from '../components/ChapterTile';
 import { slidesConfig } from '../data/slides.config';
 
-export default function HubScreen({ onSelect }) {
+export default function HubScreen({ onSelect, onBegin }) {
   return (
     <div className="fixed inset-0 overflow-y-auto bg-black font-['Helvetica_Neue',Arial,sans-serif]">
       {/* BACKGROUND */}
@@ -53,8 +53,8 @@ export default function HubScreen({ onSelect }) {
         style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)' }}
       >
         <button 
-          onClick={() => onSelect(0)}
-          className="bg-transparent border-none text-white/40 text-[10px] tracking-[0.35em] uppercase cursor-pointer border-b border-white/15 pb-1 transition-all duration-300 hover:text-white hover:border-[#C9A96E]"
+          onClick={onBegin}
+          className="bg-[#C9A96E]/10 border border-[#C9A96E]/40 text-[#C9A96E] text-[11px] tracking-[0.3em] uppercase cursor-pointer px-10 py-4 transition-all duration-300 hover:bg-[#C9A96E]/20 hover:border-[#C9A96E] hover:text-white backdrop-blur-sm shadow-[0_0_15px_rgba(201,169,110,0.15)] hover:shadow-[0_0_25px_rgba(201,169,110,0.3)] hover:-translate-y-1 rounded-[2px]"
         >
           Begin from the Opening ›
         </button>

@@ -6,6 +6,9 @@ import EditorialLuxurySlide from '../slides/EditorialLuxurySlide';
 import GridGallerySlide from '../slides/GridGallerySlide';
 import SpecsCardSlide from '../slides/SpecsCardSlide';
 import ActionClosingSlide from '../slides/ActionClosingSlide';
+import BrandPlacementSlide from '../slides/BrandPlacementSlide';
+import MultiColumnSlide from '../slides/MultiColumnSlide';
+import SplitStatsSlide from '../slides/SplitStatsSlide';
 
 const componentMap = {
   CinematicHeroSlide,
@@ -15,6 +18,9 @@ const componentMap = {
   GridGallerySlide,
   SpecsCardSlide,
   ActionClosingSlide,
+  BrandPlacementSlide,
+  MultiColumnSlide,
+  SplitStatsSlide,
 };
 
 export default function SlideRenderer({ slide, direction }) {

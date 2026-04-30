@@ -4,9 +4,10 @@ import IntroVideoScreen from './screens/IntroVideoScreen';
 import HubScreen from './screens/HubScreen';
 import DeckShell from './screens/DeckShell';
 import LoginScreen from './screens/LoginScreen';
+import PathSelector from './screens/PathSelector';
 
 export default function App() {
-  const [stage, setStage] = useState('splash'); // 'splash' | 'intro' | 'hub' | 'deck' | 'login'
+  const [stage, setStage] = useState('splash'); // 'splash' | 'intro' | 'hub' | 'path' | 'deck' | 'login'
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [activeSubDeckId, setActiveSubDeckId] = useState(null);
   const [transitioning, setTransitioning] = useState(false);
@@ -45,7 +46,18 @@ export default function App() {
       )}
       
       {stage === 'hub' && (
-        <HubScreen onSelect={(i) => goToStage('deck', i)} />
+        <HubScreen 
+          onSelect={(i) => goToStage('deck', i)} 
+          onBegin={() => goToStage('path')} 
+        />
+      )}
+      
+      {stage === 'path' && (
+        <PathSelector 
+          onSelectPath={(i) => goToStage('deck', i)}
+          onExploreAll={() => goToStage('deck', 0)}
+          onBack={() => goToStage('hub')}
+        />
       )}
       
       {stage === 'deck' && (
